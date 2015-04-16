@@ -60,7 +60,6 @@ Recommends:
  python-paramiko,
  python-validictory,
  openssh-client,
- python-distro-info,
  debian-keyring
 Description: next generation Debian package upload tool (Python library)
  dput-ng is a Debian package upload tool which provides an easy to use
