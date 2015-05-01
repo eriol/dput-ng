@@ -3,9 +3,11 @@
 MANPAGES := $(patsubst docs/man/%.man, debian/man/%, $(wildcard docs/man/*.man))
 VENDOR = $(shell dpkg-vendor --query vendor)
 
+PYVERS := $(shell pyversions -r)
+PY3VERS := $(shell py3versions -r)
 
 %:
-	dh $@ --with bash-completion,python2,sphinxdoc
+	dh $@ --with bash-completion,python2,python3,sphinxdoc
 
 
 override_dh_auto_clean:
@@ -25,12 +27,26 @@ endif
 
 
 override_dh_auto_build:
-	dh_auto_build
+	set -ex; \
+	for python in $(PYVERS) $(PY3VERS); do \
+		$$python setup.py build; \
+	done
 	make -C docs html
 
 
 override_dh_auto_install:
-	dh_auto_install
+	set -ex; \
+	for python in $(PYVERS); do \
+		$$python setup.py install --skip-build --root debian/python-dput \
+			--install-layout deb; \
+	done
+
+	set -ex; \
+	for python in $(PY3VERS); do \
+		$$python setup.py install --skip-build --root debian/python3-dput \
+			--install-layout deb; \
+	done
+
 	rm -vf ./debian/tmp/usr/lib/*/dist-packages/dput*egg-info/SOURCES.txt
 
 
