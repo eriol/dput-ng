@@ -21,6 +21,8 @@
 Lintian checker implementation
 """
 
+from __future__ import print_function
+
 import subprocess
 
 from dput.core import logger
@@ -132,7 +134,7 @@ def lintian(changes, profile, interface):
     if not "E" in tags:
         return
     for tag in set(tags["E"]):
-        print "  - %s: %s" % (tags["E"][tag]['severity'], tag)
+        print("  - %s: %s" % (tags["E"][tag]['severity'], tag))
 
     inp = interface.boolean('Lintian Checker',
                             'Upload despite of Lintian finding issues?',
