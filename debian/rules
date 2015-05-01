@@ -22,7 +22,10 @@ override_dh_auto_test:
 	# Die, python2.6, die! dput (oldschool) will work fine with 2.6, use that
 	# :)
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-	nosetests
+	set -ex; \
+	for python in $(PYVERS) $(PY3VERS); do \
+		$$python -m nose; \
+	done
 endif
 
 
